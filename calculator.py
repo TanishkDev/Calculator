@@ -6,22 +6,37 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.properties import StringProperty
 from math import *
 from kivy.core.window import Window
+from kivy.properties import DictProperty
 
 class CalcGridLayout(GridLayout):
+    interesting=DictProperty()
+    keys=DictProperty({
+            '7':'/',
+            '0':'=',
+            "'":"*"
+            })
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
-        self.funcs=[]
 
     def _keyboard_closed(self):
         self._keyboard.unbind(on_key_down=self._on_keyboard_down)
         self._keyboard = None
 
     def _on_keyboard_down(self,keyboard,keycode,text,modifiers):
-        print(keycode[1])
-        if keycode[1]=="enter":
+        key=keycode[1]
+        if key=="enter":
             self.evaluate()
+        if key=="shift":
+            self.interesting[key]='304'
+        if key.isdigit() or key in self.keys:
+            if 'shift' in self.interesting and key in self.keys:
+                self.ids.input.text+=self.keys.get(key)
+                del self.interesting['shift']
+            else:
+                self.ids.input.text+=key
 
     def on_click(self, button):
         expression = self.ids.input.text
