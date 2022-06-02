@@ -22,7 +22,7 @@ class CalcGridLayout(GridLayout):
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
 
     def _keyboard_closed(self):
-        self._keyboard.unbind(on_key_down=self._on_keyboard_down)
+        # self._keyboard.unbind(on_key_down=self._on_keyboard_down)
         self._keyboard = None
 
     def _on_keyboard_down(self,keyboard,keycode,text,modifiers):
